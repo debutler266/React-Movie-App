@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './App.css';
 import MovieList from './components/MovieList';
 
 const App = () => {
@@ -76,9 +78,12 @@ const App = () => {
         },
       ]);
   return (
-  <div>
-  //** Call MovieList component & display it */}
-  <MovieList movies={movies} />
+  <div className='container-fluid movie-app'>
+  <div className='row'>
+    <MovieList movies={movies} />
+  //** Call MovieList component & display it *//
+
+    </div>
   </div>
   );
 };
