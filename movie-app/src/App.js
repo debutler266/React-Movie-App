@@ -10,25 +10,26 @@ const App = () => {
   {/* add state to obj to hold movie results when we search */}
   const [movies, setMovies] = useState([]);
   {/* add input, store in in state so it can be called every time the search input changes for the API */}
-  const [SearchValue, setSearch] = useState('');
+  const [searchValue, setSearchValue] = useState('');
 
       {/* Ad call to API to display more movies */}
 
-      const getMovieRequest = async () => {
-        const url = 'http://www.omdbapi.com/?s=spider&apikey=85ae2750';
+      const getMovieRequest = async (searchValue) => {
+        const url = `http://www.omdbapi.com/?s=${searchValue}&apikey=85ae2750`;
 
         const response = await fetch(url);
         const responseJson = await response.json();
 
-        console.log(responseJson);
-        setMovies(responseJson.Search);
-        {/* display movies from API search */}
+        if (responseJson.Search) {
+          setMovies(responseJson.Search);
+          {/* display movies from API search */}
+        }
       };
 
 {/* getMovieRequest will fire off only when page is loading */}
       useEffect(() => {
-        getMovieRequest();
-      }, []);
+        getMovieRequest(searchValue);
+      }, [searchValue]);
 
 
   return (
