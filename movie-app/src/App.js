@@ -4,13 +4,19 @@ import './App.css';
 import MovieList from './components/MovieList';
 import MovieListHeading from './components/MovieListHeading';
 import SearchBox from './components/SearchBox';
+import AddFavourites from './components/AddFavourites';
 
 
 const App = () => {
   {/* add state to obj to hold movie results when we search */}
   const [movies, setMovies] = useState([]);
   {/* add input, store in in state so it can be called every time the search input changes for the API */}
+
+  {/* add state to variable to save the favourites*/}
+  const [favourites, setFavourites] = useState([]);
   const [searchValue, setSearchValue] = useState('');
+
+
 
       {/* Ad call to API to display more movies */}
 
@@ -31,6 +37,11 @@ const App = () => {
         getMovieRequest(searchValue);
       }, [searchValue]);
 
+      const AddFavouriteMovie = (movie) => {
+        const newFavouriteList = [...favourites, movie];
+        setFavourites(newFavouriteList);
+      };
+
 
   return (
   <div className='container-fluid movie-app'>
@@ -40,7 +51,7 @@ const App = () => {
     <SearchBox searchValue={searchValue} setSearchValue={setSearchValue}/>
     </div>
     <div className='row'>
-    <MovieList movies={movies} />
+    <MovieList movies={movies} handleFavouritesClick={AddFavouriteMovie} favouriteComponent={AddFavourites}/>
   {/* Call MovieList component & display it */}
     </div>
   </div>
