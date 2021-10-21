@@ -5,6 +5,8 @@ import MovieList from './components/MovieList';
 import MovieListHeading from './components/MovieListHeading';
 import SearchBox from './components/SearchBox';
 import AddFavourites from './components/AddFavourites';
+import RemoveFavourites from './components/RemoveFavourites';
+
 
 
 const App = () => {
@@ -37,10 +39,41 @@ const App = () => {
         getMovieRequest(searchValue);
       }, [searchValue]);
 
-      const AddFavouriteMovie = (movie) => {
+      useEffect(() => {
+        const movieFavourites = JSON.parse(localStorage.getItem('react-movie-app-favourites')
+        );
+
+        setFavourites(movieFavourites);
+      }, []);
+
+      const saveToLocalStorage = (items) => {
+        localStorage.setItem('react-movie-app-favourites', JSON.stringify(items))
+      };
+
+      const addFavouriteMovie = (movie) => {
         const newFavouriteList = [...favourites, movie];
         setFavourites(newFavouriteList);
+        saveToLocalStorage(newFavouriteList);
       };
+
+
+            {/* fuction to remove favorites from list, when we click remove from favorites,
+              filter method will filter out the movie selected from the current favorite list,
+              checks all movies in IMDB database & checks for the ID */}
+      const removeFavouriteMovie = (movie) => {
+          const newFavouriteList = favourites.filter(
+            (favourite) => favourite.imdbID !== movie.imdbID
+              );
+
+              setFavourites(newFavouriteList);
+              saveToLocalStorage(newFavouriteList);
+            };
+
+
+
+
+
+
 
 
   return (
@@ -51,9 +84,24 @@ const App = () => {
     <SearchBox searchValue={searchValue} setSearchValue={setSearchValue}/>
     </div>
     <div className='row'>
-    <MovieList movies={movies} handleFavouritesClick={AddFavouriteMovie} favouriteComponent={AddFavourites}/>
+    <MovieList
+    movies={movies}
+    handleFavouritesClick={addFavouriteMovie}
+    favouriteComponent={AddFavourites}/>
   {/* Call MovieList component & display it */}
     </div>
+    <div className='row d-flex align-items-center mt-4 mb-4'>
+      <MovieListHeading heading='Favourites'/>
+      {/* store SearchValuevalue in SearhBox state in order to make searchbar actually work */}
+      </div>
+      <div className='row'>
+      <MovieList
+      movies={favourites}
+      handleFavouritesClick={removeFavouriteMovie}
+      favouriteComponent={RemoveFavourites}
+      />
+    {/* Call MovieList component & display it */}
+      </div>
   </div>
   );
 };
